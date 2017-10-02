@@ -42,8 +42,12 @@ public abstract class Player implements UnaryOperator<Point> {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Player player = (Player) o;
         return Objects.equals(ID, player.ID);
     }
@@ -95,7 +99,9 @@ public abstract class Player implements UnaryOperator<Point> {
      * @param piece a piece
      */
     void registerPiece(Piece piece) {
-        if (piece.TYPE == PieceTypes.KING) king = piece;
+        if (piece.TYPE == PieceTypes.KING) {
+            king = piece;
+        }
         pieces.add(piece);
     }
 

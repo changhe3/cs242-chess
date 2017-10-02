@@ -1,7 +1,6 @@
 package ui;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.binding.MapBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -33,11 +32,6 @@ public class BoardController implements Initializable {
     private Button forfeitButton;
     @FXML
     private Label scoreLabel;
-
-    public enum State {
-        NONE, CHECKMATE, STALEMATE
-    }
-
     @FXML
     private Button resetButton;
     @FXML
@@ -48,13 +42,10 @@ public class BoardController implements Initializable {
     private GridPane boardPane;
     @FXML
     private GridPane root;
-
     private Array<SlotController> slotControllers;
-
     private ObjectProperty<Point> selectedSlot;
     private MapProperty<Point, Set<Board.Operation>> allOperations;
     private SetProperty<Board.Operation> selectedOperations;
-
     private Board board;
     private Player firstPlayer;
     private ObjectProperty<Player> currentPlayer;
@@ -94,11 +85,12 @@ public class BoardController implements Initializable {
 
         gameState = new SimpleObjectProperty<>(State.NONE);
         gameState.bind(Bindings.createObjectBinding(() -> {
-            if (!allOperations.isEmpty()) return State.NONE;
-            else {
+            if (!allOperations.isEmpty()) {
+                return State.NONE;
+            } else {
                 if (board.inCheck(getCurrentPlayer())) {
                     final Player winner = board.theOther(getCurrentPlayer());
-                    scores.put(winner,  scores.get(winner) + 1);
+                    scores.put(winner, scores.get(winner) + 1);
                     return State.CHECKMATE;
                 } else {
                     return State.STALEMATE;
@@ -145,7 +137,7 @@ public class BoardController implements Initializable {
                 reset(Player.black(board.BLACK.ID), Player.white(board.WHITE.ID), scores.get(board.BLACK), scores.get(board.WHITE)));
         forfeitButton.setOnMouseClicked(event -> {
             final Player winner = board.theOther(getCurrentPlayer());
-            scores.put(winner,  scores.get(winner) + 2);
+            scores.put(winner, scores.get(winner) + 2);
             reset(Player.black(board.BLACK.ID), Player.white(board.WHITE.ID), scores.get(board.BLACK), scores.get(board.WHITE));
         });
         undoButton.setOnMouseClicked(event -> undo());
@@ -216,5 +208,9 @@ public class BoardController implements Initializable {
         lastOp.first.reverse(board);
         currentPlayer.set(lastOp.second);
         setSelectedSlot(null);
+    }
+
+    public enum State {
+        NONE, CHECKMATE, STALEMATE
     }
 }

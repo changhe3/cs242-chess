@@ -42,12 +42,14 @@ public class Array<E> extends AbstractList<E>
     @SuppressWarnings("unchecked")
     public <T> T[] toArray(T[] a) {
         int size = size();
-        if (a.length < size)
+        if (a.length < size) {
             return Arrays.copyOf(this.a, size,
                     (Class<? extends T[]>) a.getClass());
+        }
         System.arraycopy(this.a, 0, a, 0, size);
-        if (a.length > size)
+        if (a.length > size) {
             a[size] = null;
+        }
         return a;
     }
 
@@ -71,13 +73,17 @@ public class Array<E> extends AbstractList<E>
     public int indexOf(Object o) {
         E[] a = this.a;
         if (o == null) {
-            for (int i = 0; i < a.length; i++)
-                if (a[i] == null)
+            for (int i = 0; i < a.length; i++) {
+                if (a[i] == null) {
                     return i;
+                }
+            }
         } else {
-            for (int i = 0; i < a.length; i++)
-                if (o.equals(a[i]))
+            for (int i = 0; i < a.length; i++) {
+                if (o.equals(a[i])) {
                     return i;
+                }
+            }
         }
         return -1;
     }

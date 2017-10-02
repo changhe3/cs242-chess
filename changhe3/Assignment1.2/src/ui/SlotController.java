@@ -1,7 +1,9 @@
 package ui;
 
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SetProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -15,7 +17,9 @@ import models.Player;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.ResourceBundle;
@@ -34,16 +38,6 @@ public class SlotController implements Initializable //, ListChangeListener<Piec
 
     private ObjectProperty<Status> status;
     private ObjectProperty<Piece> piece;
-
-
-    private enum Status {
-        SELECTED, MOVABLE, ATTACKABLE, NONE;
-
-        @Override
-        public String toString() {
-            return name().toLowerCase();
-        }
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -70,8 +64,11 @@ public class SlotController implements Initializable //, ListChangeListener<Piec
             } else if (operations.stream().anyMatch(op -> op.TO.equals(boardLoc))) {
                 final Optional<Board.Operation> op = operations.stream().filter(ops -> ops.TO.equals(boardLoc)).findAny();
                 assert op.isPresent();
-                if (op.get().getClass() == Board.Operation.Attack.class) return Status.ATTACKABLE;
-                else return Status.MOVABLE;
+                if (op.get().getClass() == Board.Operation.Attack.class) {
+                    return Status.ATTACKABLE;
+                } else {
+                    return Status.MOVABLE;
+                }
             } else {
                 return Status.NONE;
             }
@@ -106,7 +103,9 @@ public class SlotController implements Initializable //, ListChangeListener<Piec
                 boardController.setSelectedSlot(null);
                 break;
             case NONE:
-                if (Objects.equals(player, boardController.getCurrentPlayer())) boardController.setSelectedSlot(boardLoc);
+                if (Objects.equals(player, boardController.getCurrentPlayer())) {
+                    boardController.setSelectedSlot(boardLoc);
+                }
                 break;
         }
         mouseEvent.consume();
@@ -122,7 +121,9 @@ public class SlotController implements Initializable //, ListChangeListener<Piec
     }
 
     public Image render(Piece piece) {
-        if (piece == null) return null;
+        if (piece == null) {
+            return null;
+        }
         return loadImage(board.pieceResourcePaths.get(piece.TYPE)[piece.PLAYER.getAvatarId()]);
     }
 
@@ -132,6 +133,15 @@ public class SlotController implements Initializable //, ListChangeListener<Piec
 
     public ObjectProperty<Status> statusProperty() {
         return status;
+    }
+
+    private enum Status {
+        SELECTED, MOVABLE, ATTACKABLE, NONE;
+
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
     }
 }
 

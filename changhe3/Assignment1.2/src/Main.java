@@ -20,8 +20,11 @@ public class Main {
             System.out.format("Current Player: %s\n", currPlayer.ID);
             final Map<Point, List<Board.Operation>> allOps = board.generateMoves(currPlayer).collect(Collectors.groupingBy(op -> op.FROM));
             if (allOps.isEmpty()) {
-                if (board.inCheck(currPlayer)) System.out.format("Checkmate!\n");
-                else System.out.format("Stalemate!\n");
+                if (board.inCheck(currPlayer)) {
+                    System.out.format("Checkmate!\n");
+                } else {
+                    System.out.format("Stalemate!\n");
+                }
                 return;
             }
 
@@ -48,8 +51,9 @@ public class Main {
                 int option = -1;
                 while (option == -1) {
                     final String optionStr = console.nextLine();
-                    if (optionStr.equals("b")) option = 0;
-                    else {
+                    if (optionStr.equals("b")) {
+                        option = 0;
+                    } else {
                         try {
                             option = Integer.valueOf(optionStr);
                         } catch (NumberFormatException e) {
@@ -57,7 +61,9 @@ public class Main {
                         }
                     }
                 }
-                if (option == 0) continue;
+                if (option == 0) {
+                    continue;
+                }
                 selected = ops.get(option - 1);
                 board.execute(selected, currPlayer);
                 currPlayer = board.theOther(currPlayer);

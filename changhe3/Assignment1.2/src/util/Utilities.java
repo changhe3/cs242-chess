@@ -1,12 +1,7 @@
 package util;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableSet;
-
 import java.lang.reflect.Array;
 import java.util.Collection;
-import java.util.Set;
-import java.util.stream.Collector;
 
 public class Utilities {
 
