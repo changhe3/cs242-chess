@@ -1,6 +1,7 @@
 package ui;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.binding.StringBinding;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableMap;
@@ -141,9 +142,11 @@ public class BoardController implements Initializable {
             reset(Player.black(board.BLACK.ID), Player.white(board.WHITE.ID), scores.get(board.BLACK), scores.get(board.WHITE));
         });
         undoButton.setOnMouseClicked(event -> undo());
-        scoreLabel.textProperty().bind(Bindings.format("%s: %d\n%s: %d",
-                board.BLACK, Bindings.valueAt(scores, board.BLACK),
-                board.WHITE, Bindings.valueAt(scores, board.WHITE)
+        final StringBinding isBlackTurn = Bindings.createStringBinding(() -> getCurrentPlayer().equals(board.BLACK) ? "★" : "", currentPlayer);
+        final StringBinding isWhiteTurn = Bindings.createStringBinding(() -> getCurrentPlayer().equals(board.WHITE) ? "★" : "", currentPlayer);
+        scoreLabel.textProperty().bind(Bindings.format("%s%s: %d\n%s%s: %d",
+                isBlackTurn, board.BLACK, Bindings.valueAt(scores, board.BLACK),
+                isWhiteTurn, board.WHITE, Bindings.valueAt(scores, board.WHITE)
         ));
     }
 
