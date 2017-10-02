@@ -107,7 +107,7 @@ public enum PieceTypes implements PieceType {
     /**
      * Allowed to attack every second turn forward, back, and diagonally for at most 5 slots while skipping pieces, but can only move one slot
      */
-    ARTILLERY (
+    ARTILLERY(
             MovementRule.create(pt(1, 0)).allowSkipping(true).precondition((pieces, point, piece) -> piece.PLAYER.getTurnCount() % 2 == 0).disallowMove().setMaxMoves(5).finish(),
             MovementRule.create(pt(0, 1)).allowSkipping(true).precondition((pieces, point, piece) -> piece.PLAYER.getTurnCount() % 2 == 0).disallowMove().setMaxMoves(5).finish(),
             MovementRule.create(pt(-1, 0)).allowSkipping(true).precondition((pieces, point, piece) -> piece.PLAYER.getTurnCount() % 2 == 0).disallowMove().setMaxMoves(5).finish(),
@@ -134,7 +134,7 @@ public enum PieceTypes implements PieceType {
     /**
      * Allowed to attack and move up to 2 slots forward, forward-left, forward right
      */
-    ARCHER (
+    ARCHER(
             MovementRule.create(pt(0, 1)).allowSkipping(true).setMaxMoves(2).finish(),
             MovementRule.create(pt(1, 1)).allowSkipping(true).setMaxMoves(2).finish(),
             MovementRule.create(pt(-1, 1)).allowSkipping(true).setMaxMoves(2).finish()
@@ -143,8 +143,7 @@ public enum PieceTypes implements PieceType {
         public String toString() {
             return "A";
         }
-    },
-    ;
+    },;
 
     private final Array<MovementRule> moves;
 

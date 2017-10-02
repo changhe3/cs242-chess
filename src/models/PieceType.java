@@ -111,7 +111,9 @@ public interface PieceType {
             for (int i = 1; MAX_MOVES == -1 || i <= MAX_MOVES; i++) {
                 Point unit_vec = self.PLAYER.apply(UNIT_VEC);
                 Point loc = Vector2D.add(currLoc, Vector2D.scalarMult(unit_vec, i));
-                if (!board.inBound(loc)) break;
+                if (!board.inBound(loc)) {
+                    break;
+                }
                 locations.add(loc);
                 if (!SKIPPING && board.get(loc) != null) {
                     break;
@@ -198,6 +200,7 @@ public interface PieceType {
 
             /**
              * Set the piece to be allowed to move past an occupied location under this rule
+             *
              * @param skipping if skipping is allowed
              * @return the configured builder instance
              */
@@ -208,6 +211,7 @@ public interface PieceType {
 
             /**
              * Set the activation condition for this rule
+             *
              * @param active_if the callback that return true if this rule is applicable
              * @return the configured builder instance
              */
@@ -218,6 +222,7 @@ public interface PieceType {
 
             /**
              * Disallow the piece to attack under this rule
+             *
              * @return the configured builder instance
              */
             public Builder disallowAttack() {
@@ -227,6 +232,7 @@ public interface PieceType {
 
             /**
              * Disallow the piece to move with attacking under this rule
+             *
              * @return the configured builder instance
              */
             public Builder disallowMove() {
@@ -236,6 +242,7 @@ public interface PieceType {
 
             /**
              * Finish off the building process
+             *
              * @return the finished rule instance
              */
             public MovementRule finish() {

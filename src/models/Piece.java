@@ -54,6 +54,7 @@ public class Piece {
     /**
      * Set the current location of this piece. Note that this should be avoided because calling this method does update
      * its location on the board. To do so, use board.execute(Operation, Player)
+     *
      * @param location the location this piece will be moved to
      */
     public void setLocation(Point location) {
@@ -80,6 +81,7 @@ public class Piece {
 
     /**
      * Check whether the piece is captured
+     *
      * @return true if the piece is captured, false otherwise
      */
     public boolean isCaptured() {
@@ -111,6 +113,7 @@ public class Piece {
 
     /**
      * Return a string representation of this piece.
+     *
      * @return a string representation of this piece, including its owner, type, and location
      */
     @Override
@@ -120,8 +123,12 @@ public class Piece {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Piece piece = (Piece) o;
         return captured == piece.captured &&
                 Objects.equals(TYPE, piece.TYPE) &&

@@ -2,8 +2,6 @@ package util;
 
 import javafx.collections.ModifiableObservableListBase;
 
-import java.util.Arrays;
-import java.util.Objects;
 import java.util.Optional;
 
 public class ObservableArray<E> extends ModifiableObservableListBase<E> {

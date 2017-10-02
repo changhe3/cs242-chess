@@ -11,9 +11,7 @@ import java.util.Stack;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
-import static util.Shorthand.arr;
-import static util.Shorthand.pt;
-import static util.Shorthand.toChessNotation;
+import static util.Shorthand.*;
 
 /**
  * A data structure representing a chess board by storing instances of Piece in an array. The coordinate system
@@ -58,8 +56,9 @@ public final class Board extends ObservableArray<Piece> implements AutoCloseable
 
     /**
      * Construct a Board instance with n_COLS columns and n_ROWS rows
-     *  @param n_COLS the number of columns of the constructed board
-     * @param n_ROWS the number of rows of the constructed board
+     *
+     * @param n_COLS             the number of columns of the constructed board
+     * @param n_ROWS             the number of rows of the constructed board
      * @param pieceResourcePaths the path to the avatars of pieces
      */
     public Board(final int n_COLS, final int n_ROWS, final Player black, final Player white, Map<PieceType, String[]> pieceResourcePaths) {
@@ -92,7 +91,7 @@ public final class Board extends ObservableArray<Piece> implements AutoCloseable
      * Construct a copy of another Board instance.
      * Note that individual instances of Piece in the parent class is shallow copied, aka. share the same references.
      *
-     * @param board the Board instance to be copied
+     * @param board              the Board instance to be copied
      * @param pieceResourcePaths the path to the avatars of pieces
      */
     public Board(Board board, Map<PieceType, String[]> pieceResourcePaths) {
@@ -325,9 +324,15 @@ public final class Board extends ObservableArray<Piece> implements AutoCloseable
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         Board pieces = (Board) o;
         return N_COLS == pieces.N_COLS &&
                 N_ROWS == pieces.N_ROWS;
