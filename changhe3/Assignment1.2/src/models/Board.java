@@ -1,25 +1,29 @@
 package models;
 
-import util.Array;
+import util.ObservableArray;
 import util.Pair;
 
 import java.awt.*;
+import java.util.Map;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Stack;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
+import static util.Shorthand.arr;
 import static util.Shorthand.pt;
 import static util.Shorthand.toChessNotation;
 
 /**
- * A data structure representing a chess board by storing instances of Piece in an array.
- * Must be used with try-with-resources or call close() manually to clean up. The coordinate system
+ * A data structure representing a chess board by storing instances of Piece in an array. The coordinate system
  * used starts with 0 from bottom left and has up as positive-y and right as positive-x
  *
  * @author changhe3
  */
-public final class Board extends Array<Piece> implements AutoCloseable {
+public final class Board extends ObservableArray<Piece> implements AutoCloseable {
+
+    public final Map<PieceType, String[]> pieceResourcePaths;
 
     /**
      * the number of columns of the chess board
@@ -33,6 +37,8 @@ public final class Board extends Array<Piece> implements AutoCloseable {
     public final Player BLACK;
     public final Player WHITE;
 
+    private final Stack<Pair<Operation, Player>> history = new Stack<>();
+
     /**
      * Construct a Board instance with n_COLS columns and n_ROWS rows
      *
@@ -40,11 +46,29 @@ public final class Board extends Array<Piece> implements AutoCloseable {
      * @param n_ROWS the number of rows of the constructed board
      */
     public Board(final int n_COLS, final int n_ROWS, final Player black, final Player white) {
+        this(n_COLS, n_ROWS, black, white, Map.of(
+                PieceTypes.KING, arr("assets/bk.png", "assets/wk.png"),
+                PieceTypes.BISHOP, arr("assets/bb.png", "assets/wb.png"),
+                PieceTypes.ROOK, arr("assets/br.png", "assets/wr.png"),
+                PieceTypes.KNIGHT, arr("assets/bn.png", "assets/wn.png"),
+                PieceTypes.PAWN, arr("assets/bp.png", "assets/wp.png"),
+                PieceTypes.QUEEN, arr("assets/bq.png", "assets/wq.png")
+        ));
+    }
+
+    /**
+     * Construct a Board instance with n_COLS columns and n_ROWS rows
+     *  @param n_COLS the number of columns of the constructed board
+     * @param n_ROWS the number of rows of the constructed board
+     * @param pieceResourcePaths the path to the avatars of pieces
+     */
+    public Board(final int n_COLS, final int n_ROWS, final Player black, final Player white, Map<PieceType, String[]> pieceResourcePaths) {
         super(n_COLS * n_ROWS);
         N_COLS = n_COLS;
         N_ROWS = n_ROWS;
         BLACK = black;
         WHITE = white;
+        this.pieceResourcePaths = pieceResourcePaths;
     }
 
     /**
@@ -54,11 +78,30 @@ public final class Board extends Array<Piece> implements AutoCloseable {
      * @param board the Board instance to be copied
      */
     public Board(Board board) {
+        this(board, Map.of(
+                PieceTypes.KING, arr("assets/bk.png", "assets/wk.png"),
+                PieceTypes.BISHOP, arr("assets/bb.png", "assets/wb.png"),
+                PieceTypes.ROOK, arr("assets/br.png", "assets/wr.png"),
+                PieceTypes.KNIGHT, arr("assets/bn.png", "assets/wn.png"),
+                PieceTypes.PAWN, arr("assets/bp.png", "assets/wp.png"),
+                PieceTypes.QUEEN, arr("assets/bq.png", "assets/wq.png")
+        ));
+    }
+
+    /**
+     * Construct a copy of another Board instance.
+     * Note that individual instances of Piece in the parent class is shallow copied, aka. share the same references.
+     *
+     * @param board the Board instance to be copied
+     * @param pieceResourcePaths the path to the avatars of pieces
+     */
+    public Board(Board board, Map<PieceType, String[]> pieceResourcePaths) {
         super(board);
         N_ROWS = board.N_ROWS;
         N_COLS = board.N_COLS;
         BLACK = board.BLACK;
         WHITE = board.WHITE;
+        this.pieceResourcePaths = pieceResourcePaths;
     }
 
     /**
@@ -126,10 +169,11 @@ public final class Board extends Array<Piece> implements AutoCloseable {
         player.increment();
         assert getOptional(op.FROM).filter(piece -> piece.PLAYER == player).isPresent();
         op.accept(this);
+        history.push(Pair.of(op, player));
     }
 
     /**
-     * Execute a group of operations, used for testing
+     * Execute a group of operations, used only for testing
      *
      * @param moves a Stream of Pairs of Operations and the Players from which they operates
      */
@@ -273,6 +317,10 @@ public final class Board extends Array<Piece> implements AutoCloseable {
         Player enemy = theOther(player);
         return generateMoves(enemy, false)
                 .anyMatch(op -> op.getClass() == Operation.Attack.class && op.TO.equals(player.getKing().getLocation()));
+    }
+
+    public Stack<Pair<Operation, Player>> getHistory() {
+        return history;
     }
 
     @Override
