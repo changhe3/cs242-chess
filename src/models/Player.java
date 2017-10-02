@@ -24,7 +24,6 @@ public abstract class Player implements UnaryOperator<Point> {
         ID = id;
     }
 
-
     public static Player black() {
         return new Black();
     }
@@ -100,6 +99,8 @@ public abstract class Player implements UnaryOperator<Point> {
         pieces.add(piece);
     }
 
+    public abstract int getAvatarId();
+
     public static final class Black extends Player {
 
         public Black() {
@@ -118,6 +119,11 @@ public abstract class Player implements UnaryOperator<Point> {
         @Override
         public String toString() {
             return ID;
+        }
+
+        @Override
+        public int getAvatarId() {
+            return 0;
         }
     }
 
@@ -139,6 +145,11 @@ public abstract class Player implements UnaryOperator<Point> {
         @Override
         public String toString() {
             return ID;
+        }
+
+        @Override
+        public int getAvatarId() {
+            return 1;
         }
     }
 }

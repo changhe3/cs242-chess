@@ -1,6 +1,12 @@
 package util;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableSet;
+
 import java.lang.reflect.Array;
+import java.util.Collection;
+import java.util.Set;
+import java.util.stream.Collector;
 
 public class Utilities {
 
@@ -22,5 +28,11 @@ public class Utilities {
         final Object atI = Array.get(array, i);
         Array.set(array, i, Array.get(array, j));
         Array.set(array, j, atI);
+    }
+
+    public static <E> void toggle(final Collection<E> col, E elem) {
+        if (!col.remove(elem)) {
+            col.add(elem);
+        }
     }
 }

@@ -1,0 +1,27 @@
+#root {
+    -fx-border-width: 2px;
+    -fx-border-color: lightblue;
+}
+
+#root .selected {
+    -fx-border-color: blue;
+}
+
+#root .black {
+    -fx-background-color: #A9A9A9;
+}
+
+#root .white {
+    -fx-background-color: #FFFFFF;
+}
+
+#root .movable {
+    -fx-border-color: green;
+}
+
+#root .attackable {
+    -fx-border-color: red;
+}
+
+#root .none {}
+
